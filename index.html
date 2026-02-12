@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stripe Revenue Audit - Find Your Growth Leaks</title>
-    <script src="https://js.stripe.com/v3/"></script>
+    <title>Stripe Revenue Audit</title>
     <style>
         * {
             margin: 0;
@@ -14,95 +13,54 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
             background: #f8f9fa;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
             padding: 20px;
         }
         
-        header {
-            text-align: center;
-            padding: 60px 20px 40px;
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
             background: white;
-            border-bottom: 1px solid #e0e0e0;
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
         }
         
         h1 {
-            font-size: 48px;
+            font-size: 42px;
             color: #1a1a1a;
             margin-bottom: 10px;
             font-weight: 700;
         }
         
-        .subheading {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        
-        .hero-badge {
+        .badge {
             display: inline-block;
             background: #f0f4ff;
             color: #5b5bff;
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             margin-bottom: 20px;
         }
         
-        .hero-stats {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .stat {
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1a1a1a;
-        }
-        
-        .stat-label {
-            font-size: 14px;
+        .subheading {
+            font-size: 18px;
             color: #666;
-            margin-top: 5px;
-        }
-        
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin: 60px auto;
-            max-width: 1200px;
-        }
-        
-        .left-section h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            color: #1a1a1a;
+            margin-bottom: 40px;
+            line-height: 1.5;
         }
         
         .features {
             list-style: none;
-            margin: 30px 0;
+            margin: 40px 0;
         }
         
         .features li {
-            padding: 15px 0;
+            padding: 14px 0;
             border-bottom: 1px solid #e0e0e0;
-            font-size: 16px;
+            color: #333;
+            font-size: 15px;
             display: flex;
             align-items: flex-start;
         }
@@ -111,22 +69,17 @@
             content: "✓";
             color: #4CAF50;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 18px;
             margin-right: 12px;
             flex-shrink: 0;
         }
         
-        .right-section {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
-            height: fit-content;
-        }
-        
-        .price-box {
+        .price-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
             text-align: center;
-            margin-bottom: 30px;
+            margin: 40px 0;
         }
         
         .price {
@@ -138,44 +91,12 @@
         
         .price-label {
             color: #666;
-            font-size: 16px;
-        }
-        
-        .what-you-get {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-        
-        .what-you-get h3 {
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: #666;
-            margin-bottom: 15px;
-        }
-        
-        .what-you-get ul {
-            list-style: none;
             font-size: 14px;
         }
         
-        .what-you-get ul li {
-            padding: 6px 0;
-            color: #333;
-        }
-        
-        .what-you-get ul li:before {
-            content: "•";
-            color: #5b5bff;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        
-        .cta-button {
+        .button {
             width: 100%;
-            padding: 16px 24px;
+            padding: 18px 24px;
             background: #5b5bff;
             color: white;
             border: none;
@@ -183,15 +104,18 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: background 0.3s, transform 0.1s;
             margin-bottom: 15px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
         
-        .cta-button:hover {
+        .button:hover {
             background: #4a4ae6;
         }
         
-        .cta-button:active {
+        .button:active {
             transform: scale(0.98);
         }
         
@@ -201,77 +125,26 @@
             color: #666;
         }
         
-        .guarantee-icon {
-            font-size: 18px;
-            margin-right: 5px;
-        }
-        
-        .timeline {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            margin: 40px 0;
-            border-left: 4px solid #5b5bff;
-        }
-        
-        .timeline h3 {
-            font-size: 20px;
-            margin-bottom: 20px;
-            color: #1a1a1a;
-        }
-        
-        .timeline-item {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .timeline-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        
-        .timeline-day {
-            font-weight: 600;
-            color: #5b5bff;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        
-        .timeline-desc {
-            color: #666;
-            font-size: 14px;
-        }
-        
         .faq {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            margin: 40px 0;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
         }
         
         .faq h3 {
-            font-size: 24px;
-            margin-bottom: 25px;
+            font-size: 18px;
+            margin-bottom: 20px;
             color: #1a1a1a;
         }
         
         .faq-item {
             margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .faq-item:last-child {
-            border-bottom: none;
         }
         
         .faq-q {
             font-weight: 600;
             color: #1a1a1a;
             margin-bottom: 8px;
-            cursor: pointer;
         }
         
         .faq-a {
@@ -279,179 +152,56 @@
             font-size: 14px;
             line-height: 1.6;
         }
-        
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: #666;
-            font-size: 14px;
-            border-top: 1px solid #e0e0e0;
-            margin-top: 60px;
-        }
-        
-        .error-message {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        
-        .success-message {
-            color: #28a745;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-        
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 32px;
-            }
-            
-            .hero-stats {
-                gap: 15px;
-            }
-            
-            .right-section {
-                position: relative;
-            }
-        }
     </style>
 </head>
 <body>
-    <header>
-        <div class="hero-badge">Official Stripe Partner</div>
-        <h1>Stripe Revenue Audit</h1>
-        <p class="subheading">Find Hidden Revenue Leaks in Your SaaS Metrics</p>
-        <div class="hero-stats">
-            <div class="stat">
-                <div class="stat-number">$500-2K</div>
-                <div class="stat-label">Avg. Revenue Found</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">3-5</div>
-                <div class="stat-label">Actionable Findings</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">4-5</div>
-                <div class="stat-label">Days Turnaround</div>
-            </div>
-        </div>
-    </header>
-
     <div class="container">
-        <div class="main-content">
-            <div class="left-section">
-                <h2>What You'll Discover</h2>
-                
-                <ul class="features">
-                    <li><strong>Revenue Leaks:</strong> Payment failures, failed charges, recovery opportunities</li>
-                    <li><strong>Churn Patterns:</strong> Why customers are leaving and how to fix it</li>
-                    <li><strong>Growth Bottlenecks:</strong> Exactly where growth is slowing and why</li>
-                    <li><strong>Expansion Opportunities:</strong> Untapped upsell and tier migration potential</li>
-                    <li><strong>Unit Economics:</strong> Your real ARPU, CAC, and efficiency metrics</li>
-                    <li><strong>Action Plan:</strong> Prioritized list of quick wins and strategic improvements</li>
-                </ul>
-
-                <div class="timeline">
-                    <h3>How It Works</h3>
-                    <div class="timeline-item">
-                        <div class="timeline-day">Day 1</div>
-                        <div class="timeline-desc">You purchase audit and grant read-only Stripe access (OAuth)</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-day">Days 2-4</div>
-                        <div class="timeline-desc">We analyze your metrics deeply, identify findings, create recommendations</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-day">Day 5</div>
-                        <div class="timeline-desc">Receive professional PDF report + pre-filled metrics dashboard</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-day">Days 6-35</div>
-                        <div class="timeline-desc">Email support for questions (respond within 24 hours)</div>
-                    </div>
-                </div>
-
-                <div class="faq">
-                    <h3>Common Questions</h3>
-                    
-                    <div class="faq-item">
-                        <div class="faq-q">🔒 Is my data safe?</div>
-                        <div class="faq-a">Yes. We use OAuth (same method Stripe's official partners use). We never see your API keys and only request read-only access. You can disconnect anytime with one click.</div>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <div class="faq-q">📊 What if I use a different payment processor?</div>
-                        <div class="faq-a">We specialize in Stripe. If you use Stripe for subscriptions, we can audit you. If you're on a different platform, reach out and we can discuss options.</div>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <div class="faq-q">⏱️ Why does it take 4-5 days?</div>
-                        <div class="faq-a">Quality takes time. We deeply analyze your data, not just run a script. We identify patterns, validate findings, and create recommendations that actually work.</div>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <div class="faq-q">💬 What if I have questions?</div>
-                        <div class="faq-a">Email support is included for 30 days. Reply with any questions about the findings or recommendations, and we'll answer within 24 hours.</div>
-                    </div>
-                    
-                    <div class="faq-item">
-                        <div class="faq-q">🎯 Will I actually find revenue?</div>
-                        <div class="faq-a">Most founders find $500-2000/month in recoverable revenue (payment failures, churn prevention, upsell opportunities). Results vary based on your current situation.</div>
-                    </div>
-                </div>
+        <div class="badge">Official Stripe Partner</div>
+        
+        <h1>Stripe Revenue Audit</h1>
+        
+        <p class="subheading">
+            Find hidden revenue leaks in your SaaS metrics. Get a professional analysis of your Stripe data and actionable recommendations to boost your MRR.
+        </p>
+        
+        <ul class="features">
+            <li>Deep analysis of your MRR, churn, and growth trends</li>
+            <li>Professional PDF report with 3-5 specific findings</li>
+            <li>Pre-filled Excel dashboard for monthly tracking</li>
+            <li>30 days of email support</li>
+            <li>4-5 day turnaround</li>
+        </ul>
+        
+        <div class="price-section">
+            <div class="price">$1,200</div>
+            <div class="price-label">One-time payment</div>
+        </div>
+        
+        <!-- REPLACE THIS LINK WITH YOUR STRIPE PAYMENT LINK -->
+        <a href="https://buy.stripe.com/bJe6oJgsH56d93w2unbbG00" class="button" target="_blank" rel="noopener noreferrer">Get Your Audit Now</a>
+        
+        <div class="guarantee">
+            ✓ 100% secure with Stripe
+        </div>
+        
+        <div class="faq">
+            <h3>Questions?</h3>
+            
+            <div class="faq-item">
+                <div class="faq-q">How does it work?</div>
+                <div class="faq-a">After payment, we'll email you a form to securely connect your Stripe account. We analyze your metrics, create a report, and send you findings within 4-5 days.</div>
             </div>
-
-            <div class="right-section">
-                <div class="price-box">
-                    <div class="price">$1,200</div>
-                    <div class="price-label">One-time payment</div>
-                </div>
-
-                <div class="what-you-get">
-                    <h3>Includes:</h3>
-                    <ul>
-                        <li>Deep Stripe data analysis</li>
-                        <li>Professional PDF report</li>
-                        <li>3-5 specific findings</li>
-                        <li>Action plan (prioritized)</li>
-                        <li>Pre-filled metrics dashboard</li>
-                        <li>30 days email support</li>
-                    </ul>
-                </div>
-
-                <button class="cta-button" id="checkout-button">Get Your Audit Now</button>
-
-                <div class="guarantee">
-                    <span class="guarantee-icon">✓</span>
-                    100% secure with Stripe
-                </div>
+            
+            <div class="faq-item">
+                <div class="faq-q">Is my data safe?</div>
+                <div class="faq-a">Yes. We use secure authentication and only request read-only access to your Stripe data. You can disconnect anytime.</div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-q">What if I don't find value?</div>
+                <div class="faq-a">Most founders find $500-2000/month in recoverable revenue. If you're not satisfied, email us within 7 days for a refund.</div>
             </div>
         </div>
     </div>
-
-    <script>
-        const checkoutButton = document.getElementById('checkout-button');
-        
-        checkoutButton.addEventListener('click', function() {
-            // Replace with your Stripe publishable key
-            const stripe = Stripe('pk_live_51SZRMhQb4zuzzpxKFh2yeGSAxwFwdOq519RUjba980Eg8XZ2lcQMeVwUaLgDJv7EedBbBgmcui1hLCZoqm64dD6I00OALMo8vH');
-            
-            // Replace with your price ID from Stripe Dashboard
-            stripe.redirectToCheckout({
-                lineItems: [{price: 'price_1T05qaQb4zuzzpxKfgkU80MV', quantity: 1}],
-                mode: 'payment',
-                successUrl: window.location.protocol + '//' + window.location.host + '/success.html',
-                cancelUrl: window.location.protocol + '//' + window.location.host + '/',
-            }).then(function (result) {
-                if (result.error) {
-                    alert(result.error.message);
-                }
-            });
-        });
-    </script>
 </body>
 </html>
