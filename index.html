@@ -5,203 +5,359 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stripe Revenue Audit</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --ink: #0f1e2e;
+            --ink-soft: #344a62;
+            --bg: #edf4f1;
+            --card: #ffffff;
+            --line: #d5e1dd;
+            --accent: #f57f17;
+            --accent-strong: #d96e12;
+            --trust: #0b7d66;
+            --shadow: 0 24px 55px rgba(15, 30, 46, 0.14);
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f8f9fa;
-            padding: 20px;
+            font-family: 'Manrope', sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% 8%, #d4ece5 0, transparent 35%),
+                radial-gradient(circle at 85% 16%, #fde8ca 0, transparent 30%),
+                linear-gradient(160deg, #f6fbf8 0%, var(--bg) 100%);
+            padding: 28px 18px 40px;
         }
-        
+
         .container {
-            max-width: 700px;
-            margin: 50px auto;
-            background: white;
-            padding: 50px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+            max-width: 1020px;
+            margin: 0 auto;
+            display: grid;
+            gap: 24px;
         }
-        
-        h1 {
-            font-size: 42px;
-            color: #1a1a1a;
-            margin-bottom: 10px;
-            font-weight: 700;
+
+        .hero-card {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 22px;
+            background: var(--card);
+            border: 1px solid rgba(15, 30, 46, 0.08);
+            border-radius: var(--radius-xl);
+            padding: 34px;
+            box-shadow: var(--shadow);
+            animation: fade-up 0.6s ease both;
         }
-        
-        .badge {
+
+        .eyebrow {
             display: inline-block;
-            background: #f0f4ff;
-            color: #5b5bff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 20px;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--trust);
+            background: #e7f5f1;
+            border: 1px solid #c7e7dd;
+            border-radius: 999px;
+            padding: 8px 12px;
+            margin-bottom: 16px;
         }
-        
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2rem, 3.6vw, 3.4rem);
+            line-height: 1.06;
+            margin-bottom: 14px;
+            max-width: 14ch;
+        }
+
         .subheading {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 40px;
-            line-height: 1.5;
+            font-size: clamp(1rem, 1.2vw, 1.12rem);
+            line-height: 1.75;
+            color: var(--ink-soft);
+            max-width: 56ch;
+            margin-bottom: 22px;
         }
-        
-        .features {
-            list-style: none;
-            margin: 40px 0;
+
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
         }
-        
-        .features li {
-            padding: 14px 0;
-            border-bottom: 1px solid #e0e0e0;
-            color: #333;
-            font-size: 15px;
+
+        .proof-card {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px 12px;
+            background: #f9fcfb;
+        }
+
+        .proof-number {
+            font-size: 1.08rem;
+            font-weight: 800;
+            margin-bottom: 3px;
+        }
+
+        .proof-label {
+            font-size: 0.78rem;
+            color: var(--ink-soft);
+            line-height: 1.35;
+        }
+
+        .offer {
+            border: 1px solid #f4d2a6;
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            background: linear-gradient(180deg, #fffaf3 0%, #fff4e4 100%);
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
+            justify-content: space-between;
+            animation: fade-up 0.75s ease both;
         }
-        
-        .features li:before {
-            content: "✓";
-            color: #4CAF50;
-            font-weight: bold;
-            font-size: 18px;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-        
-        .price-section {
-            background: #f8f9fa;
-            padding: 30px;
-            border-radius: 8px;
-            text-align: center;
-            margin: 40px 0;
-        }
-        
-        .price {
-            font-size: 56px;
+
+        .offer-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #9a4b0f;
+            font-size: 0.75rem;
             font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 5px;
+            background: #ffe6c6;
+            border-radius: 999px;
+            padding: 6px 10px;
+            margin-bottom: 16px;
         }
-        
+
+        .price {
+            font-size: clamp(2.2rem, 4vw, 3.6rem);
+            line-height: 1;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
         .price-label {
-            color: #666;
-            font-size: 14px;
+            font-size: 0.9rem;
+            color: #805530;
+            margin-bottom: 14px;
         }
-        
+
+        .slots {
+            font-size: 0.9rem;
+            color: #7d4f1e;
+            margin-bottom: 16px;
+        }
+
         .button {
             width: 100%;
-            padding: 18px 24px;
-            background: #5b5bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.1s;
-            margin-bottom: 15px;
-            text-decoration: none;
             display: inline-block;
             text-align: center;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 800;
+            text-decoration: none;
+            border-radius: 12px;
+            padding: 16px 14px;
+            transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 20px rgba(245, 127, 23, 0.25);
+            margin-bottom: 12px;
         }
-        
+
         .button:hover {
-            background: #4a4ae6;
+            background: var(--accent-strong);
+            transform: translateY(-1px);
         }
-        
-        .button:active {
-            transform: scale(0.98);
-        }
-        
-        .guarantee {
+
+        .security {
+            font-size: 0.82rem;
+            color: #825421;
             text-align: center;
-            font-size: 13px;
-            color: #666;
         }
-        
-        .faq {
-            margin-top: 50px;
-            padding-top: 30px;
-            border-top: 1px solid #e0e0e0;
+
+        .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
         }
-        
-        .faq h3 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #1a1a1a;
+
+        .panel {
+            background: var(--card);
+            border: 1px solid rgba(15, 30, 46, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            animation: fade-up 0.9s ease both;
         }
-        
+
+        .panel h2 {
+            font-size: 1.25rem;
+            margin-bottom: 18px;
+            letter-spacing: -0.02em;
+        }
+
+        .features {
+            list-style: none;
+        }
+
+        .features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #ebf1ee;
+            font-size: 0.94rem;
+            line-height: 1.5;
+            color: var(--ink-soft);
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .features li::before {
+            content: "";
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-top: 5px;
+            background: radial-gradient(circle at 35% 35%, #3ec5a2, #0b7d66);
+            flex-shrink: 0;
+        }
+
         .faq-item {
-            margin-bottom: 20px;
+            padding: 12px 0;
+            border-bottom: 1px solid #ebf1ee;
         }
-        
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
         .faq-q {
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
         }
-        
+
         .faq-a {
-            color: #666;
-            font-size: 14px;
+            color: var(--ink-soft);
             line-height: 1.6;
+            font-size: 0.9rem;
+        }
+
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 920px) {
+            .hero-card,
+            .details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 620px) {
+            body {
+                padding: 16px 12px 30px;
+            }
+
+            .hero-card,
+            .panel {
+                padding: 24px 18px;
+                border-radius: 18px;
+            }
+
+            .proof-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="badge">Official Stripe Partner</div>
-        
-        <h1>Stripe Revenue Audit</h1>
-        
-        <p class="subheading">
-            Find hidden revenue leaks in your SaaS metrics. Get a professional analysis of your Stripe data and actionable recommendations to boost your MRR.
-        </p>
-        
-        <ul class="features">
-            <li>Deep analysis of your MRR, churn, and growth trends</li>
-            <li>Professional PDF report with 3-5 specific findings</li>
-            <li>Pre-filled Excel dashboard for monthly tracking</li>
-            <li>30 days of email support</li>
-            <li>4-5 day turnaround</li>
-        </ul>
-        
-        <div class="price-section">
-            <div class="price">$1,200</div>
-            <div class="price-label">One-time payment</div>
-        </div>
-        
-        <!-- REPLACE THIS LINK WITH YOUR STRIPE PAYMENT LINK -->
-        <a href="https://buy.stripe.com/bJe6oJgsH56d93w2unbbG00" class="button" target="_blank" rel="noopener noreferrer">Get Your Audit Now</a>
-        
-        <div class="guarantee">
-            ✓ 100% secure with Stripe
-        </div>
-        
-        <div class="faq">
-            <h3>Questions?</h3>
-            
-            <div class="faq-item">
-                <div class="faq-q">How does it work?</div>
-                <div class="faq-a">After payment, we'll email you a form to securely connect your Stripe account. We analyze your metrics, create a report, and send you findings within 4-5 days.</div>
+    <main class="container">
+        <section class="hero-card">
+            <div>
+                <div class="eyebrow">Revenue Recovery Audit</div>
+                <h1>Find the Stripe leaks quietly shrinking your MRR.</h1>
+                <p class="subheading">
+                    This is a founder-focused teardown of your billing, churn, and expansion patterns.
+                    You get prioritized fixes that target fast revenue recovery, not vanity metrics.
+                </p>
+                <div class="proof-grid">
+                    <div class="proof-card">
+                        <div class="proof-number">$500-$2,000/mo</div>
+                        <div class="proof-label">common recoverable revenue range</div>
+                    </div>
+                    <div class="proof-card">
+                        <div class="proof-number">4-5 days</div>
+                        <div class="proof-label">average turnaround to full report</div>
+                    </div>
+                    <div class="proof-card">
+                        <div class="proof-number">3-5 wins</div>
+                        <div class="proof-label">specific opportunities highlighted</div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="faq-item">
-                <div class="faq-q">Is my data safe?</div>
-                <div class="faq-a">Yes. We use secure authentication and only request read-only access to your Stripe data. You can disconnect anytime.</div>
+
+            <aside class="offer">
+                <div>
+                    <div class="offer-badge">Stripe-native analysis</div>
+                    <div class="price">$1,200</div>
+                    <div class="price-label">One-time payment. No retainer.</div>
+                    <p class="slots">Limited audit slots each week to keep response quality high.</p>
+                </div>
+                <div>
+                    <a href="assessment.html" class="button">Run Free Leak Check</a>
+                    <div class="security">Step 1: 2-minute assessment. Step 2: secure Stripe checkout.</div>
+                    <div class="security" style="margin-top: 6px;">
+                        Already decided?
+                        <a href="https://buy.stripe.com/bJe6oJgsH56d93w2unbbG00" target="_blank" rel="noopener noreferrer" style="color: #9a4b0f; font-weight: 700;">
+                            Skip to checkout
+                        </a>
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <section class="details">
+            <div class="panel">
+                <h2>What You Receive</h2>
+                <ul class="features">
+                    <li>Complete MRR, churn, and retention fault-line analysis</li>
+                    <li>Executive PDF report with concrete fixes and expected impact</li>
+                    <li>Plug-and-track operating dashboard for ongoing monthly review</li>
+                    <li>Email support for 30 days to help execute recommendations</li>
+                </ul>
             </div>
-            
-            <div class="faq-item">
-                <div class="faq-q">What if I don't find value?</div>
-                <div class="faq-a">Most founders find $500-2000/month in recoverable revenue. If you're not satisfied, email us within 7 days for a refund.</div>
+
+            <div class="panel">
+                <h2>Founder FAQ</h2>
+                <div class="faq-item">
+                    <div class="faq-q">How does onboarding work?</div>
+                    <div class="faq-a">After payment, you receive a short intake form and secure read-only Stripe connection steps. No code deploy needed.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">Is my data protected?</div>
+                    <div class="faq-a">Yes. Access is limited to what is needed for analysis, and can be revoked anytime from your Stripe dashboard.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-q">What if I do not see value?</div>
+                    <div class="faq-a">If the recommendations are not useful, email within 7 days and request a refund.</div>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 </body>
 </html>

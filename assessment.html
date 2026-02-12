@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Stripe Leak Check</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --ink: #0f1e2e;
+            --ink-soft: #3b546d;
+            --panel: #ffffff;
+            --line: #d6e3de;
+            --bg-soft: #eef6f2;
+            --trust: #0b7d66;
+            --warn: #f57f17;
+            --warn-strong: #dc710f;
+            --danger: #cc3c2f;
+            --radius-xl: 22px;
+            --radius-lg: 16px;
+            --shadow: 0 24px 50px rgba(12, 30, 45, 0.14);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 14% 8%, #d4ece3 0, transparent 32%),
+                radial-gradient(circle at 86% 10%, #fde7c8 0, transparent 30%),
+                linear-gradient(155deg, #f7fcf9 0%, #ebf4f0 100%);
+            padding: 22px 14px 34px;
+        }
+
+        .page {
+            width: min(960px, 100%);
+            margin: 0 auto;
+            display: grid;
+            gap: 18px;
+        }
+
+        .header,
+        .panel,
+        .result {
+            border: 1px solid rgba(15, 30, 46, 0.1);
+            border-radius: var(--radius-xl);
+            background: var(--panel);
+            box-shadow: var(--shadow);
+        }
+
+        .header {
+            padding: 28px 24px;
+            position: relative;
+            overflow: hidden;
+            animation: rise 0.5s ease both;
+        }
+
+        .header::after {
+            content: "";
+            position: absolute;
+            right: -70px;
+            top: -70px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffd8ad 0, #ffedd3 65%, transparent 70%);
+            opacity: 0.9;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            font-size: 11px;
+            font-weight: 800;
+            border-radius: 999px;
+            background: #e7f4ef;
+            color: var(--trust);
+            border: 1px solid #c3e5da;
+            padding: 7px 12px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2rem, 3.8vw, 3rem);
+            line-height: 1.06;
+            margin-bottom: 8px;
+            max-width: 14ch;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lead {
+            color: var(--ink-soft);
+            line-height: 1.7;
+            max-width: 60ch;
+            position: relative;
+            z-index: 1;
+        }
+
+        .panel {
+            padding: 24px 18px;
+            animation: rise 0.65s ease both;
+        }
+
+        .section-title {
+            font-size: 1.12rem;
+            margin-bottom: 14px;
+            font-weight: 800;
+        }
+
+        .subtle {
+            color: var(--ink-soft);
+            font-size: 0.92rem;
+            margin-bottom: 18px;
+        }
+
+        .question-grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .q-card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius-lg);
+            padding: 14px;
+            background: #fbfefd;
+        }
+
+        .q-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .options {
+            display: grid;
+            gap: 8px;
+        }
+
+        .option {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #ffffff;
+            padding: 10px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--ink-soft);
+            line-height: 1.45;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .option:hover {
+            border-color: #b7d7cc;
+            background: #f5fcf9;
+        }
+
+        .option input {
+            margin-top: 2px;
+            accent-color: var(--trust);
+            cursor: pointer;
+        }
+
+        .actions {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 13px 18px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--warn);
+            color: #ffffff;
+            box-shadow: 0 10px 18px rgba(245, 127, 23, 0.22);
+        }
+
+        .btn-primary:hover {
+            background: var(--warn-strong);
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            background: #eef5f2;
+            color: #2f5264;
+            border: 1px solid #d6e4de;
+        }
+
+        .result {
+            display: none;
+            padding: 24px 18px;
+            animation: rise 0.5s ease both;
+        }
+
+        .result.active {
+            display: block;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .risk-high {
+            background: #ffe3e0;
+            color: var(--danger);
+            border: 1px solid #f7c2bc;
+        }
+
+        .risk-medium {
+            background: #ffeed8;
+            color: #9a5608;
+            border: 1px solid #f8d5a8;
+        }
+
+        .risk-low {
+            background: #e5f6ef;
+            color: #0d7f68;
+            border: 1px solid #c2e8dc;
+        }
+
+        .result h2 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.7rem, 3.2vw, 2.2rem);
+            line-height: 1.12;
+            margin-bottom: 8px;
+            max-width: 20ch;
+        }
+
+        .result-meta {
+            color: var(--ink-soft);
+            font-size: 0.92rem;
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .estimate {
+            border: 1px solid #f8d7ad;
+            border-radius: 14px;
+            background: linear-gradient(180deg, #fffaf2 0%, #fff4e2 100%);
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+
+        .estimate strong {
+            font-size: 1.2rem;
+        }
+
+        .recommendations {
+            list-style: none;
+            display: grid;
+            gap: 9px;
+            margin-bottom: 16px;
+        }
+
+        .recommendations li {
+            border: 1px solid #e4efea;
+            background: var(--bg-soft);
+            border-radius: 10px;
+            padding: 11px;
+            font-size: 0.91rem;
+            color: var(--ink-soft);
+            line-height: 1.5;
+        }
+
+        .tiny {
+            color: #557082;
+            font-size: 0.82rem;
+            line-height: 1.5;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 620px) {
+            .header,
+            .panel,
+            .result {
+                border-radius: 16px;
+                padding: 18px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <header class="header">
+            <div class="eyebrow">Free Leak Check</div>
+            <h1>How much Stripe revenue are you leaving on the table?</h1>
+            <p class="lead">
+                Answer these quick questions and get an instant leak risk score with a rough recovery estimate.
+                You will also see what to fix first before booking the full audit.
+            </p>
+        </header>
+
+        <section class="panel">
+            <h2 class="section-title">2-Minute Assessment</h2>
+            <p class="subtle">Choose the option that best describes your current setup.</p>
+
+            <form id="assessment-form">
+                <div class="question-grid">
+                    <fieldset class="q-card">
+                        <legend class="q-title">1) Current monthly recurring revenue (MRR)</legend>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="mrr" value="1" data-mrr="7000" required>Under $10k</label>
+                            <label class="option"><input type="radio" name="mrr" value="2" data-mrr="30000">$10k to $50k</label>
+                            <label class="option"><input type="radio" name="mrr" value="3" data-mrr="90000">$50k to $150k</label>
+                            <label class="option"><input type="radio" name="mrr" value="4" data-mrr="180000">$150k+</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="q-card">
+                        <legend class="q-title">2) Failed payment recovery (dunning)</legend>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="dunning" value="0" required>Automated retries + reminder emails are active</label>
+                            <label class="option"><input type="radio" name="dunning" value="2">Retries are on, but emails or sequencing are weak</label>
+                            <label class="option"><input type="radio" name="dunning" value="3">No clear dunning flow in place</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="q-card">
+                        <legend class="q-title">3) Plan and pricing hygiene</legend>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="pricing" value="0" required>We review and retire stale plans at least quarterly</label>
+                            <label class="option"><input type="radio" name="pricing" value="2">Some old plans still exist, but mostly managed</label>
+                            <label class="option"><input type="radio" name="pricing" value="3">Many legacy plans and exceptions are active</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="q-card">
+                        <legend class="q-title">4) Churn diagnostics cadence</legend>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="churn" value="0" required>We review churn by segment every month</label>
+                            <label class="option"><input type="radio" name="churn" value="2">We check churn sometimes, not deeply segmented</label>
+                            <label class="option"><input type="radio" name="churn" value="3">No consistent churn review process</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="q-card">
+                        <legend class="q-title">5) Upgrade and expansion tracking</legend>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="expansion" value="0" required>Expansion revenue is tracked by plan and cohort</label>
+                            <label class="option"><input type="radio" name="expansion" value="2">We see top-level expansion but little detail</label>
+                            <label class="option"><input type="radio" name="expansion" value="3">Expansion is not tracked clearly</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="q-card">
+                        <legend class="q-title">6) Trial to paid conversion visibility</legend>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="trial" value="0" required>Conversion is measured by source and segment</label>
+                            <label class="option"><input type="radio" name="trial" value="2">We track overall conversion only</label>
+                            <label class="option"><input type="radio" name="trial" value="3">Trial conversion reporting is unclear</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="q-card">
+                        <legend class="q-title">7) Billing event monitoring and alerts</legend>
+                        <div class="options">
+                            <label class="option"><input type="radio" name="alerts" value="0" required>We have alerts and regular billing event review</label>
+                            <label class="option"><input type="radio" name="alerts" value="2">Partial visibility, not proactive</label>
+                            <label class="option"><input type="radio" name="alerts" value="3">Mostly reactive when customers complain</label>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="actions">
+                    <button type="submit" class="btn btn-primary">Show My Leak Score</button>
+                    <a href="index.html" class="btn btn-ghost">Back to Home</a>
+                </div>
+            </form>
+        </section>
+
+        <section class="result" id="result">
+            <span id="risk-badge" class="risk-badge">Risk</span>
+            <h2 id="result-title">Your Stripe leak score is ready.</h2>
+            <p class="result-meta" id="result-meta"></p>
+
+            <div class="estimate">
+                Estimated recoverable revenue:
+                <strong id="estimate-value">$0 to $0 / month</strong>
+            </div>
+
+            <ul class="recommendations" id="recommendations"></ul>
+
+            <div class="actions">
+                <a class="btn btn-primary" href="https://buy.stripe.com/bJe6oJgsH56d93w2unbbG00" target="_blank" rel="noopener noreferrer">Book Full Audit - $1,200</a>
+                <a class="btn btn-ghost" href="index.html">Back to Home</a>
+            </div>
+            <p class="tiny">
+                This estimate is directional and based on your responses. The full audit quantifies leak sources from live Stripe data and gives a prioritized fix plan.
+            </p>
+        </section>
+    </main>
+
+    <script>
+        const form = document.getElementById('assessment-form');
+        const result = document.getElementById('result');
+        const riskBadge = document.getElementById('risk-badge');
+        const resultTitle = document.getElementById('result-title');
+        const resultMeta = document.getElementById('result-meta');
+        const estimateValue = document.getElementById('estimate-value');
+        const recommendations = document.getElementById('recommendations');
+
+        const recommendationMap = {
+            dunning: [
+                "Keep tuning retry intervals and reminder sequences to capture failed renewals faster.",
+                "Tighten retry timing and customer notifications to reduce avoidable involuntary churn.",
+                "Build a full dunning flow with smart retries, reminders, and card update nudges."
+            ],
+            pricing: [
+                "Maintain your quarterly plan cleanup and watch discount edge cases.",
+                "Consolidate legacy plans and remove exception-heavy pricing paths.",
+                "Run a plan architecture cleanup to eliminate revenue leakage from old pricing logic."
+            ],
+            churn: [
+                "Your cadence is strong. Add deeper cohort diagnostics for early warning signals.",
+                "Create a monthly segmented churn review by plan, tenure, and acquisition channel.",
+                "Set up a formal churn review process and define owner-level retention actions."
+            ],
+            expansion: [
+                "Continue mapping expansion by plan and account behavior for better forecasting.",
+                "Track expansion by segment to identify where upsell motion is underperforming.",
+                "Instrument expansion metrics so upgrade opportunities are visible and repeatable."
+            ],
+            trial: [
+                "Use your segmented conversion data to optimize activation bottlenecks.",
+                "Break trial conversion down by source and product usage milestone.",
+                "Set up consistent trial-to-paid reporting to uncover hidden conversion drag."
+            ],
+            alerts: [
+                "Keep refining alert thresholds to catch billing anomalies earlier.",
+                "Expand alert coverage and add a weekly billing events review loop.",
+                "Set proactive alerts for failed invoices, refund spikes, and subscription anomalies."
+            ]
+        };
+
+        function formatCurrency(value) {
+            return "$" + Math.round(value).toLocaleString("en-US");
+        }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const requiredFields = ["mrr", "dunning", "pricing", "churn", "expansion", "trial", "alerts"];
+            const answers = {};
+
+            for (const field of requiredFields) {
+                const selected = document.querySelector(`input[name="${field}"]:checked`);
+                if (!selected) {
+                    return;
+                }
+                answers[field] = Number(selected.value);
+            }
+
+            const mrrSelected = document.querySelector('input[name="mrr"]:checked');
+            const mrrBase = Number(mrrSelected.dataset.mrr || 7000);
+            const riskScore = answers.dunning + answers.pricing + answers.churn + answers.expansion + answers.trial + answers.alerts;
+
+            let riskLabel = "Low Leak Risk";
+            let riskClass = "risk-low";
+            let multiplier = 0.012;
+            let headline = "Your systems are relatively healthy, with specific optimization upside.";
+
+            if (riskScore >= 14) {
+                riskLabel = "High Leak Risk";
+                riskClass = "risk-high";
+                multiplier = 0.05;
+                headline = "There is likely meaningful recoverable MRR hidden in billing and retention gaps.";
+            } else if (riskScore >= 8) {
+                riskLabel = "Medium Leak Risk";
+                riskClass = "risk-medium";
+                multiplier = 0.026;
+                headline = "You have solid foundations, but several leaks are probably compounding month to month.";
+            }
+
+            const estimatedMid = mrrBase * multiplier;
+            const estimatedLow = estimatedMid * 0.7;
+            const estimatedHigh = estimatedMid * 1.3;
+
+            const candidates = [
+                { key: "dunning", score: answers.dunning },
+                { key: "pricing", score: answers.pricing },
+                { key: "churn", score: answers.churn },
+                { key: "expansion", score: answers.expansion },
+                { key: "trial", score: answers.trial },
+                { key: "alerts", score: answers.alerts }
+            ];
+
+            candidates.sort((a, b) => b.score - a.score);
+            const topThree = candidates.slice(0, 3);
+
+            recommendations.innerHTML = "";
+            for (const item of topThree) {
+                const li = document.createElement("li");
+                const level = item.score >= 3 ? 2 : item.score >= 2 ? 1 : 0;
+                li.textContent = recommendationMap[item.key][level];
+                recommendations.appendChild(li);
+            }
+
+            riskBadge.className = "risk-badge " + riskClass;
+            riskBadge.textContent = riskLabel;
+            resultTitle.textContent = headline;
+            resultMeta.textContent = `Score: ${riskScore}/18. This is a directional snapshot based on your current operating patterns.`;
+            estimateValue.textContent = `${formatCurrency(estimatedLow)} to ${formatCurrency(estimatedHigh)} / month`;
+
+            result.classList.add("active");
+            result.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+    </script>
+</body>
+</html>
