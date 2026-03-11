@@ -3,96 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Stripe Leak Check</title>
+    <title>Free Stripe Leak Check — 2-Minute Assessment</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650;9..144,700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
         :root {
             --ink: #0f1e2e;
-            --ink-soft: #3b546d;
+            --ink-mid: #2c4258;
+            --ink-soft: #4a647e;
             --panel: #ffffff;
             --line: #d6e3de;
             --bg-soft: #eef6f2;
             --trust: #0b7d66;
+            --trust-light: #e6f5f1;
             --warn: #f57f17;
             --warn-strong: #dc710f;
             --danger: #cc3c2f;
             --radius-xl: 22px;
             --radius-lg: 16px;
-            --shadow: 0 24px 50px rgba(12, 30, 45, 0.14);
+            --radius-md: 12px;
+            --shadow: 0 20px 48px rgba(12, 30, 45, 0.12);
+            --shadow-sm: 0 4px 16px rgba(12, 30, 45, 0.07);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Manrope', sans-serif;
             color: var(--ink);
             background:
-                radial-gradient(circle at 14% 8%, #d4ece3 0, transparent 32%),
-                radial-gradient(circle at 86% 10%, #fde7c8 0, transparent 30%),
-                linear-gradient(155deg, #f7fcf9 0%, #ebf4f0 100%);
-            padding: 22px 14px 34px;
+                radial-gradient(circle at 14% 8%, #cce8df 0, transparent 34%),
+                radial-gradient(circle at 86% 10%, #fde3c0 0, transparent 30%),
+                linear-gradient(155deg, #f5fbf8 0%, #eaf4f0 100%);
+            padding: 0 0 44px;
+            min-height: 100vh;
         }
 
+        /* ── Nav ── */
+        nav {
+            padding: 0 24px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(15, 30, 46, 0.07);
+            background: rgba(255,255,255,0.76);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--ink);
+            text-decoration: none;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-brand span { color: var(--trust); }
+
+        .nav-back {
+            font-size: 0.83rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-back:hover { color: var(--ink); }
+
+        /* ── Progress ── */
+        .progress-bar {
+            height: 3px;
+            background: #e0ece8;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--trust);
+            transition: width 0.4s ease;
+        }
+
+        /* ── Page ── */
         .page {
-            width: min(960px, 100%);
+            width: min(720px, 100%);
             margin: 0 auto;
+            padding: 32px 18px 0;
             display: grid;
-            gap: 18px;
+            gap: 20px;
         }
 
-        .header,
-        .panel,
-        .result {
-            border: 1px solid rgba(15, 30, 46, 0.1);
-            border-radius: var(--radius-xl);
-            background: var(--panel);
-            box-shadow: var(--shadow);
+        /* ── Step indicator ── */
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--ink-soft);
         }
 
+        .step-pill {
+            background: var(--trust-light);
+            color: var(--trust);
+            border: 1px solid #b8ddd4;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        /* ── Header card ── */
         .header {
-            padding: 28px 24px;
+            background: var(--panel);
+            border: 1px solid rgba(15, 30, 46, 0.09);
+            border-radius: var(--radius-xl);
+            padding: 28px 26px;
+            box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
-            animation: rise 0.5s ease both;
         }
 
         .header::after {
             content: "";
             position: absolute;
-            right: -70px;
-            top: -70px;
-            width: 220px;
-            height: 220px;
+            right: -60px;
+            top: -60px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #ffd8ad 0, #ffedd3 65%, transparent 70%);
-            opacity: 0.9;
+            background: radial-gradient(circle at 30% 30%, #ffd8ad 0, #ffedd3 65%, transparent 72%);
+            opacity: 0.85;
+            pointer-events: none;
         }
 
         .eyebrow {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             text-transform: uppercase;
             letter-spacing: 0.09em;
             font-size: 11px;
             font-weight: 800;
             border-radius: 999px;
-            background: #e7f4ef;
+            background: var(--trust-light);
             color: var(--trust);
-            border: 1px solid #c3e5da;
-            padding: 7px 12px;
-            margin-bottom: 12px;
+            border: 1px solid #c0e4d8;
+            padding: 6px 12px;
+            margin-bottom: 14px;
         }
 
         h1 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(2rem, 3.8vw, 3rem);
-            line-height: 1.06;
-            margin-bottom: 8px;
-            max-width: 14ch;
+            font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+            line-height: 1.08;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+            max-width: 20ch;
             position: relative;
             z-index: 1;
         }
@@ -100,79 +172,141 @@
         .lead {
             color: var(--ink-soft);
             line-height: 1.7;
-            max-width: 60ch;
+            max-width: 58ch;
+            font-size: 0.94rem;
             position: relative;
             z-index: 1;
         }
 
+        /* ── Form panel ── */
         .panel {
-            padding: 24px 18px;
-            animation: rise 0.65s ease both;
+            background: var(--panel);
+            border: 1px solid rgba(15, 30, 46, 0.09);
+            border-radius: var(--radius-xl);
+            padding: 26px 22px;
+            box-shadow: var(--shadow-sm);
         }
 
         .section-title {
-            font-size: 1.12rem;
-            margin-bottom: 14px;
+            font-size: 1.08rem;
             font-weight: 800;
+            margin-bottom: 4px;
         }
 
-        .subtle {
+        .section-sub {
             color: var(--ink-soft);
-            font-size: 0.92rem;
-            margin-bottom: 18px;
+            font-size: 0.88rem;
+            margin-bottom: 22px;
         }
 
-        .question-grid {
-            display: grid;
-            gap: 14px;
-        }
+        /* ── Questions ── */
+        .question-grid { display: grid; gap: 14px; }
 
         .q-card {
-            border: 1px solid var(--line);
+            border: 1.5px solid var(--line);
             border-radius: var(--radius-lg);
-            padding: 14px;
-            background: #fbfefd;
+            padding: 16px;
+            background: #fafcfb;
+            transition: border-color 0.2s ease;
+        }
+
+        .q-card:focus-within { border-color: #9fcdc2; }
+
+        .q-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .q-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--trust-light);
+            color: var(--trust);
+            font-weight: 800;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
         }
 
         .q-title {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            line-height: 1.4;
         }
 
-        .options {
-            display: grid;
-            gap: 8px;
-        }
+        .options { display: grid; gap: 8px; }
 
         .option {
-            border: 1px solid var(--line);
+            border: 1.5px solid var(--line);
             border-radius: 10px;
             background: #ffffff;
-            padding: 10px;
+            padding: 10px 12px;
             display: flex;
             align-items: flex-start;
-            gap: 8px;
-            font-size: 0.9rem;
+            gap: 10px;
+            font-size: 0.88rem;
             color: var(--ink-soft);
-            line-height: 1.45;
+            line-height: 1.5;
             cursor: pointer;
-            transition: border-color 0.2s ease, background 0.2s ease;
+            transition: border-color 0.18s ease, background 0.18s ease;
         }
 
-        .option:hover {
-            border-color: #b7d7cc;
-            background: #f5fcf9;
-        }
+        .option:hover { border-color: #a8d4c8; background: #f2faf6; }
 
         .option input {
             margin-top: 2px;
             accent-color: var(--trust);
             cursor: pointer;
+            flex-shrink: 0;
         }
 
+        /* ── Email fieldset ── */
+        .email-card {
+            border: 1.5px solid #d4eae4;
+            border-radius: var(--radius-lg);
+            padding: 18px 16px;
+            background: var(--trust-light);
+        }
+
+        .email-label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--ink-mid);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .email-sub {
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+            margin-bottom: 10px;
+        }
+
+        .email-input {
+            width: 100%;
+            border: 1.5px solid #b8ddd4;
+            border-radius: 10px;
+            padding: 12px 14px;
+            font: inherit;
+            font-size: 0.92rem;
+            color: var(--ink);
+            background: #fff;
+            transition: border-color 0.18s ease;
+            outline: none;
+        }
+
+        .email-input:focus { border-color: var(--trust); }
+        .email-input::placeholder { color: #9ab5c0; }
+
+        /* ── Actions ── */
         .actions {
-            margin-top: 16px;
+            margin-top: 18px;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
@@ -180,172 +314,235 @@
 
         .btn {
             border: none;
-            border-radius: 12px;
-            padding: 13px 18px;
+            border-radius: var(--radius-md);
+            padding: 14px 20px;
+            font-family: inherit;
             font-weight: 800;
-            font-size: 0.95rem;
+            font-size: 0.93rem;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            transition: transform 0.2s ease, background 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
         }
 
         .btn-primary {
             background: var(--warn);
             color: #ffffff;
-            box-shadow: 0 10px 18px rgba(245, 127, 23, 0.22);
+            box-shadow: 0 8px 20px rgba(245, 127, 23, 0.26);
         }
 
         .btn-primary:hover {
             background: var(--warn-strong);
             transform: translateY(-1px);
+            box-shadow: 0 12px 26px rgba(245, 127, 23, 0.32);
         }
 
         .btn-ghost {
             background: #eef5f2;
-            color: #2f5264;
-            border: 1px solid #d6e4de;
+            color: var(--ink-mid);
+            border: 1px solid #d0e4de;
         }
 
+        .btn-ghost:hover { background: #e4eeea; }
+
+        /* ── Result ── */
         .result {
             display: none;
-            padding: 24px 18px;
-            animation: rise 0.5s ease both;
+            background: var(--panel);
+            border: 1px solid rgba(15, 30, 46, 0.09);
+            border-radius: var(--radius-xl);
+            padding: 28px 24px;
+            box-shadow: var(--shadow);
         }
 
-        .result.active {
-            display: block;
-        }
+        .result.active { display: block; }
 
         .risk-badge {
             display: inline-block;
             border-radius: 999px;
-            padding: 7px 12px;
-            font-size: 0.75rem;
+            padding: 6px 14px;
+            font-size: 0.73rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
-        .risk-high {
-            background: #ffe3e0;
-            color: var(--danger);
-            border: 1px solid #f7c2bc;
-        }
-
-        .risk-medium {
-            background: #ffeed8;
-            color: #9a5608;
-            border: 1px solid #f8d5a8;
-        }
-
-        .risk-low {
-            background: #e5f6ef;
-            color: #0d7f68;
-            border: 1px solid #c2e8dc;
-        }
+        .risk-high  { background: #ffe3e0; color: var(--danger); border: 1px solid #f5bbb6; }
+        .risk-medium { background: #ffeed8; color: #9a5608; border: 1px solid #f5d0a0; }
+        .risk-low   { background: #e4f6ef; color: #0d7f68; border: 1px solid #b8e4d6; }
 
         .result h2 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(1.7rem, 3.2vw, 2.2rem);
+            font-size: clamp(1.5rem, 2.8vw, 2rem);
             line-height: 1.12;
+            letter-spacing: -0.02em;
             margin-bottom: 8px;
-            max-width: 20ch;
+            max-width: 26ch;
         }
 
         .result-meta {
             color: var(--ink-soft);
-            font-size: 0.92rem;
-            margin-bottom: 12px;
+            font-size: 0.88rem;
+            margin-bottom: 18px;
             line-height: 1.6;
         }
 
         .estimate {
-            border: 1px solid #f8d7ad;
-            border-radius: 14px;
-            background: linear-gradient(180deg, #fffaf2 0%, #fff4e2 100%);
-            padding: 14px;
-            margin-bottom: 14px;
+            border: 1px solid #f0d5a8;
+            border-radius: var(--radius-md);
+            background: linear-gradient(175deg, #fffbf4 0%, #fff3e0 100%);
+            padding: 16px 18px;
+            margin-bottom: 18px;
         }
 
-        .estimate strong {
-            font-size: 1.2rem;
+        .estimate-label {
+            font-size: 0.8rem;
+            color: #885a20;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .estimate-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--ink);
+            letter-spacing: -0.02em;
+        }
+
+        .estimate-sub {
+            font-size: 0.78rem;
+            color: #8a6030;
+            margin-top: 4px;
+        }
+
+        .recs-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--ink-mid);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
         }
 
         .recommendations {
             list-style: none;
             display: grid;
             gap: 9px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
         .recommendations li {
-            border: 1px solid #e4efea;
+            border: 1px solid #deecea;
             background: var(--bg-soft);
             border-radius: 10px;
-            padding: 11px;
-            font-size: 0.91rem;
-            color: var(--ink-soft);
-            line-height: 1.5;
+            padding: 12px 14px;
+            font-size: 0.88rem;
+            color: var(--ink-mid);
+            line-height: 1.55;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .rec-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--trust);
+            flex-shrink: 0;
+            margin-top: 5px;
+        }
+
+        .result-divider {
+            border: none;
+            border-top: 1px solid var(--line);
+            margin: 18px 0;
+        }
+
+        .result-cta-label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--ink-mid);
+            margin-bottom: 10px;
         }
 
         .tiny {
-            color: #557082;
-            font-size: 0.82rem;
-            line-height: 1.5;
+            color: #6b8a9a;
+            font-size: 0.78rem;
+            line-height: 1.55;
+            margin-top: 12px;
         }
 
         @keyframes rise {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 620px) {
-            .header,
-            .panel,
-            .result {
-                border-radius: 16px;
-                padding: 18px 14px;
-            }
+        .anim { animation: rise 0.45s ease both; }
+
+        @media (max-width: 560px) {
+            .page { padding: 20px 12px 0; }
+            .header, .panel, .result { padding: 20px 16px; }
+            .btn { padding: 13px 16px; font-size: 0.88rem; }
         }
     </style>
 </head>
 <body>
+
+    <nav>
+        <a class="nav-brand" href="index.html">Rev<span>Pilot</span></a>
+        <a href="index.html" class="nav-back">← Back to home</a>
+    </nav>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+
     <main class="page">
-        <header class="header">
+
+        <div class="step-indicator">
+            <span class="step-pill">Step 1 of 2</span>
+            <span>Free assessment · takes 2 minutes</span>
+        </div>
+
+        <header class="header anim">
             <div class="eyebrow">Free Leak Check</div>
             <h1>How much Stripe revenue are you leaving on the table?</h1>
             <p class="lead">
-                Answer these quick questions and get an instant leak risk score with a rough recovery estimate.
-                You will also see what to fix first before booking the full audit.
+                Answer 7 quick questions and get an instant leak-risk score with a rough monthly recovery estimate — plus the top fixes to prioritize before booking the full audit.
             </p>
         </header>
 
-        <section class="panel">
-            <h2 class="section-title">2-Minute Assessment</h2>
-            <p class="subtle">Choose the option that best describes your current setup.</p>
+        <section class="panel anim">
+            <div class="section-title">2-Minute Assessment</div>
+            <p class="section-sub">Choose the option that best reflects your current setup.</p>
 
             <form id="assessment-form">
                 <div class="question-grid">
+
                     <fieldset class="q-card">
-                        <legend class="q-title">1) Current monthly recurring revenue (MRR)</legend>
+                        <div class="q-header">
+                            <span class="q-num">1</span>
+                            <legend class="q-title">Current monthly recurring revenue (MRR)</legend>
+                        </div>
                         <div class="options">
                             <label class="option"><input type="radio" name="mrr" value="1" data-mrr="7000" required>Under $10k</label>
-                            <label class="option"><input type="radio" name="mrr" value="2" data-mrr="30000">$10k to $50k</label>
-                            <label class="option"><input type="radio" name="mrr" value="3" data-mrr="90000">$50k to $150k</label>
+                            <label class="option"><input type="radio" name="mrr" value="2" data-mrr="30000">$10k – $50k</label>
+                            <label class="option"><input type="radio" name="mrr" value="3" data-mrr="90000">$50k – $150k</label>
                             <label class="option"><input type="radio" name="mrr" value="4" data-mrr="180000">$150k+</label>
                         </div>
                     </fieldset>
 
                     <fieldset class="q-card">
-                        <legend class="q-title">2) Failed payment recovery (dunning)</legend>
+                        <div class="q-header">
+                            <span class="q-num">2</span>
+                            <legend class="q-title">Failed payment recovery (dunning)</legend>
+                        </div>
                         <div class="options">
                             <label class="option"><input type="radio" name="dunning" value="0" required>Automated retries + reminder emails are active</label>
                             <label class="option"><input type="radio" name="dunning" value="2">Retries are on, but emails or sequencing are weak</label>
@@ -354,7 +551,10 @@
                     </fieldset>
 
                     <fieldset class="q-card">
-                        <legend class="q-title">3) Plan and pricing hygiene</legend>
+                        <div class="q-header">
+                            <span class="q-num">3</span>
+                            <legend class="q-title">Plan and pricing hygiene</legend>
+                        </div>
                         <div class="options">
                             <label class="option"><input type="radio" name="pricing" value="0" required>We review and retire stale plans at least quarterly</label>
                             <label class="option"><input type="radio" name="pricing" value="2">Some old plans still exist, but mostly managed</label>
@@ -363,7 +563,10 @@
                     </fieldset>
 
                     <fieldset class="q-card">
-                        <legend class="q-title">4) Churn diagnostics cadence</legend>
+                        <div class="q-header">
+                            <span class="q-num">4</span>
+                            <legend class="q-title">Churn diagnostics cadence</legend>
+                        </div>
                         <div class="options">
                             <label class="option"><input type="radio" name="churn" value="0" required>We review churn by segment every month</label>
                             <label class="option"><input type="radio" name="churn" value="2">We check churn sometimes, not deeply segmented</label>
@@ -372,7 +575,10 @@
                     </fieldset>
 
                     <fieldset class="q-card">
-                        <legend class="q-title">5) Upgrade and expansion tracking</legend>
+                        <div class="q-header">
+                            <span class="q-num">5</span>
+                            <legend class="q-title">Upgrade and expansion tracking</legend>
+                        </div>
                         <div class="options">
                             <label class="option"><input type="radio" name="expansion" value="0" required>Expansion revenue is tracked by plan and cohort</label>
                             <label class="option"><input type="radio" name="expansion" value="2">We see top-level expansion but little detail</label>
@@ -381,7 +587,10 @@
                     </fieldset>
 
                     <fieldset class="q-card">
-                        <legend class="q-title">6) Trial to paid conversion visibility</legend>
+                        <div class="q-header">
+                            <span class="q-num">6</span>
+                            <legend class="q-title">Trial to paid conversion visibility</legend>
+                        </div>
                         <div class="options">
                             <label class="option"><input type="radio" name="trial" value="0" required>Conversion is measured by source and segment</label>
                             <label class="option"><input type="radio" name="trial" value="2">We track overall conversion only</label>
@@ -390,7 +599,10 @@
                     </fieldset>
 
                     <fieldset class="q-card">
-                        <legend class="q-title">7) Billing event monitoring and alerts</legend>
+                        <div class="q-header">
+                            <span class="q-num">7</span>
+                            <legend class="q-title">Billing event monitoring and alerts</legend>
+                        </div>
                         <div class="options">
                             <label class="option"><input type="radio" name="alerts" value="0" required>We have alerts and regular billing event review</label>
                             <label class="option"><input type="radio" name="alerts" value="2">Partial visibility, not proactive</label>
@@ -398,71 +610,109 @@
                         </div>
                     </fieldset>
 
-                    <fieldset class="q-card">
-                        <legend class="q-title">Send my detailed assessment to:</legend>
+                    <div class="email-card">
+                        <label class="email-label" for="lead_email">Send my full assessment to:</label>
+                        <p class="email-sub">We'll email your detailed results and a copy of the recommendations.</p>
                         <input
                             type="email"
+                            id="lead_email"
                             name="lead_email"
+                            class="email-input"
                             placeholder="you@company.com"
                             required
-                            style="width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px; font: inherit; color: var(--ink); background: #fff;"
                         >
-                    </fieldset>
+                    </div>
+
                 </div>
 
                 <div class="actions">
-                    <button type="submit" class="btn btn-primary">Show My Leak Score</button>
+                    <button type="submit" class="btn btn-primary">Show My Leak Score →</button>
                     <a href="index.html" class="btn btn-ghost">Back to Home</a>
                 </div>
             </form>
         </section>
 
+        <!-- Result -->
         <section class="result" id="result">
             <span id="risk-badge" class="risk-badge">Risk</span>
             <h2 id="result-title">Your Stripe leak score is ready.</h2>
             <p class="result-meta" id="result-meta"></p>
 
             <div class="estimate">
-                Estimated recoverable revenue:
-                <strong id="estimate-value">$0 to $0 / month</strong>
+                <div class="estimate-label">Estimated recoverable revenue</div>
+                <div class="estimate-value" id="estimate-value">$0 – $0 / month</div>
+                <div class="estimate-sub">Directional estimate based on your MRR and risk score</div>
             </div>
 
+            <div class="recs-title">Top areas to address first</div>
             <ul class="recommendations" id="recommendations"></ul>
 
+            <hr class="result-divider">
+
+            <div class="result-cta-label">Ready to quantify these leaks from your live Stripe data?</div>
             <div class="actions">
-                <a class="btn btn-primary" href="https://buy.stripe.com/bJe6oJgsH56d93w2unbbG00" target="_blank" rel="noopener noreferrer">Book Full Audit - $1,200</a>
+                <a class="btn btn-primary" href="https://buy.stripe.com/bJe6oJgsH56d93w2unbbG00" target="_blank" rel="noopener noreferrer">Book Full Audit — $1,200</a>
                 <a class="btn btn-ghost" href="index.html">Back to Home</a>
             </div>
             <p class="tiny">
-                This estimate is directional and based on your responses. The full audit quantifies leak sources from live Stripe data and gives a prioritized fix plan.
+                This estimate is directional and based on your responses. The full audit quantifies each leak source from live Stripe data and delivers a prioritized fix plan.
             </p>
         </section>
+
     </main>
 
     <script>
-        const form = document.getElementById('assessment-form');
-        const result = document.getElementById('result');
-        const riskBadge = document.getElementById('risk-badge');
-        const resultTitle = document.getElementById('result-title');
-        const resultMeta = document.getElementById('result-meta');
-        const estimateValue = document.getElementById('estimate-value');
-        const recommendations = document.getElementById('recommendations');
+        const form         = document.getElementById('assessment-form');
+        const result       = document.getElementById('result');
+        const riskBadge    = document.getElementById('risk-badge');
+        const resultTitle  = document.getElementById('result-title');
+        const resultMeta   = document.getElementById('result-meta');
+        const estimateVal  = document.getElementById('estimate-value');
+        const recsList     = document.getElementById('recommendations');
+        const progressFill = document.getElementById('progress-fill');
+
+        const radioFields  = ['mrr','dunning','pricing','churn','expansion','trial','alerts'];
+        const totalFields  = radioFields.length + 1; // +1 for email
+
+        // Live progress tracking
+        function updateProgress() {
+            let filled = 0;
+            for (const f of radioFields) {
+                if (document.querySelector(`input[name="${f}"]:checked`)) filled++;
+            }
+            const email = document.getElementById('lead_email').value.trim();
+            if (email) filled++;
+            progressFill.style.width = Math.round((filled / totalFields) * 100) + '%';
+        }
+
+        form.addEventListener('change', updateProgress);
+        document.getElementById('lead_email').addEventListener('input', updateProgress);
+
+        // Highlight selected options
+        form.addEventListener('change', function(e) {
+            if (e.target.type === 'radio') {
+                const group = e.target.closest('.options');
+                group.querySelectorAll('.option').forEach(o => o.style.borderColor = '');
+                e.target.closest('.option').style.borderColor = '#6fc1b0';
+                e.target.closest('.option').style.background = '#eef8f5';
+            }
+        });
 
         const recommendationMap = {
             dunning: [
-                "Keep tuning retry intervals and reminder sequences to capture failed renewals faster.",
+                "Keep tuning retry intervals and reminder sequences to recover failed renewals faster.",
                 "Tighten retry timing and customer notifications to reduce avoidable involuntary churn.",
-                "Build a full dunning flow with smart retries, reminders, and card update nudges."
+                "Build a full dunning flow: smart retries, reminder emails, and card update nudges."
             ],
             pricing: [
-                "Maintain your quarterly plan cleanup and watch discount edge cases.",
+                "Maintain your quarterly plan cleanup and watch for discount edge cases.",
                 "Consolidate legacy plans and remove exception-heavy pricing paths.",
-                "Run a plan architecture cleanup to eliminate revenue leakage from old pricing logic."
+                "Run a plan architecture cleanup to eliminate revenue leakage from outdated pricing logic."
             ],
             churn: [
-                "Your cadence is strong. Add deeper cohort diagnostics for early warning signals.",
+                "Your cadence is strong — add deeper cohort diagnostics for early warning signals.",
                 "Create a monthly segmented churn review by plan, tenure, and acquisition channel.",
-                "Set up a formal churn review process and define owner-level retention actions."
+                "Set up a formal churn review process and assign owner-level retention actions."
             ],
             expansion: [
                 "Continue mapping expansion by plan and account behavior for better forecasting.",
@@ -481,27 +731,23 @@
             ]
         };
 
-        function formatCurrency(value) {
-            return "$" + Math.round(value).toLocaleString("en-US");
+        function formatCurrency(v) {
+            return "$" + Math.round(v).toLocaleString("en-US");
         }
 
-        form.addEventListener('submit', function (event) {
-            event.preventDefault();
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-            const requiredFields = ["mrr", "dunning", "pricing", "churn", "expansion", "trial", "alerts"];
             const answers = {};
-
-            for (const field of requiredFields) {
-                const selected = document.querySelector(`input[name="${field}"]:checked`);
-                if (!selected) {
-                    return;
-                }
-                answers[field] = Number(selected.value);
+            for (const field of radioFields) {
+                const sel = document.querySelector(`input[name="${field}"]:checked`);
+                if (!sel) return;
+                answers[field] = Number(sel.value);
             }
 
-            const mrrSelected = document.querySelector('input[name="mrr"]:checked');
-            const mrrBase = Number(mrrSelected.dataset.mrr || 7000);
-            const riskScore = answers.dunning + answers.pricing + answers.churn + answers.expansion + answers.trial + answers.alerts;
+            const mrrSel  = document.querySelector('input[name="mrr"]:checked');
+            const mrrBase = Number(mrrSel.dataset.mrr || 7000);
+            const riskScore = radioFields.slice(1).reduce((s, f) => s + answers[f], 0); // exclude MRR
 
             let riskLabel = "Low Leak Risk";
             let riskClass = "risk-low";
@@ -509,49 +755,60 @@
             let headline = "Your systems are relatively healthy, with specific optimization upside.";
 
             if (riskScore >= 14) {
-                riskLabel = "High Leak Risk";
-                riskClass = "risk-high";
+                riskLabel  = "High Leak Risk";
+                riskClass  = "risk-high";
                 multiplier = 0.05;
-                headline = "There is likely meaningful recoverable MRR hidden in billing and retention gaps.";
+                headline   = "There is likely meaningful recoverable MRR hidden in billing and retention gaps.";
             } else if (riskScore >= 8) {
-                riskLabel = "Medium Leak Risk";
-                riskClass = "risk-medium";
+                riskLabel  = "Medium Leak Risk";
+                riskClass  = "risk-medium";
                 multiplier = 0.026;
-                headline = "You have solid foundations, but several leaks are probably compounding month to month.";
+                headline   = "You have solid foundations, but several leaks are probably compounding month to month.";
             }
 
-            const estimatedMid = mrrBase * multiplier;
-            const estimatedLow = estimatedMid * 0.7;
-            const estimatedHigh = estimatedMid * 1.3;
+            const mid  = mrrBase * multiplier;
+            const low  = mid * 0.7;
+            const high = mid * 1.3;
 
-            const candidates = [
-                { key: "dunning", score: answers.dunning },
-                { key: "pricing", score: answers.pricing },
-                { key: "churn", score: answers.churn },
-                { key: "expansion", score: answers.expansion },
-                { key: "trial", score: answers.trial },
-                { key: "alerts", score: answers.alerts }
-            ];
-
+            const candidates = Object.keys(recommendationMap).map(key => ({
+                key,
+                score: answers[key] || 0
+            }));
             candidates.sort((a, b) => b.score - a.score);
-            const topThree = candidates.slice(0, 3);
 
-            recommendations.innerHTML = "";
-            for (const item of topThree) {
+            recsList.innerHTML = "";
+            for (const item of candidates.slice(0, 3)) {
                 const li = document.createElement("li");
                 const level = item.score >= 3 ? 2 : item.score >= 2 ? 1 : 0;
-                li.textContent = recommendationMap[item.key][level];
-                recommendations.appendChild(li);
+                li.innerHTML = `<span class="rec-dot"></span><span>${recommendationMap[item.key][level]}</span>`;
+                recsList.appendChild(li);
             }
 
-            riskBadge.className = "risk-badge " + riskClass;
+            riskBadge.className   = "risk-badge " + riskClass;
             riskBadge.textContent = riskLabel;
             resultTitle.textContent = headline;
-            resultMeta.textContent = `Score: ${riskScore}/18. This is a directional snapshot based on your current operating patterns.`;
-            estimateValue.textContent = `${formatCurrency(estimatedLow)} to ${formatCurrency(estimatedHigh)} / month`;
+            resultMeta.textContent  = `Leak score: ${riskScore} / 18 — This is a directional snapshot based on your current operating patterns.`;
+            estimateVal.textContent = `${formatCurrency(low)} – ${formatCurrency(high)} / month`;
 
+            progressFill.style.width = '100%';
             result.classList.add("active");
             result.scrollIntoView({ behavior: "smooth", block: "start" });
+
+            // Fire-and-forget: persist lead to server (non-blocking)
+            fetch('/api/assessment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email:     form.lead_email.value,
+                    mrr:       answers.mrr,
+                    dunning:   answers.dunning,
+                    pricing:   answers.pricing,
+                    churn:     answers.churn,
+                    expansion: answers.expansion,
+                    trial:     answers.trial,
+                    alerts:    answers.alerts,
+                }),
+            }).catch(() => {}); // silently ignore network errors
         });
     </script>
 </body>

@@ -1,0 +1,16 @@
+{
+  "name": "revpilot-audit",
+  "version": "1.0.0",
+  "description": "RevPilot Stripe Revenue Audit — landing page + backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --experimental-sqlite server.js",
+    "dev": "node --experimental-sqlite --watch server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "nodemailer": "^8.0.2",
+    "stripe": "^16.2.0"
+  }
+}

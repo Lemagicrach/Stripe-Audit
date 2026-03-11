@@ -3,172 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Success - Stripe Revenue Audit</title>
+    <title>Booking Confirmed — Stripe Revenue Audit</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,650&family=Manrope:wght@400;500;600;700;800&display=swap');
 
         :root {
             --ink: #0f1e2e;
-            --ink-soft: #37516e;
+            --ink-mid: #2c4258;
+            --ink-soft: #4a647e;
             --panel: #ffffff;
-            --panel-soft: #f6fbf8;
-            --line: #d4e3de;
+            --panel-soft: #f4fbf8;
+            --line: #d0e4de;
             --success: #0b7d66;
+            --success-light: #e4f5f0;
             --accent: #f57f17;
+            --radius-xl: 22px;
+            --radius-lg: 14px;
+            --shadow: 0 24px 56px rgba(15, 30, 46, 0.13);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Manrope', sans-serif;
             min-height: 100vh;
             display: grid;
             place-items: center;
-            padding: 20px 12px;
+            padding: 24px 14px;
             color: var(--ink);
             background:
-                radial-gradient(circle at 18% 10%, #d6eee7 0, transparent 36%),
-                radial-gradient(circle at 82% 14%, #ffe8c9 0, transparent 30%),
-                linear-gradient(165deg, #f5faf8 0%, #eaf4ef 100%);
+                radial-gradient(circle at 18% 10%, #cce8e0 0, transparent 38%),
+                radial-gradient(circle at 82% 14%, #ffe4c4 0, transparent 30%),
+                linear-gradient(165deg, #f3faf7 0%, #e8f3ef 100%);
         }
 
         .container {
-            width: min(620px, 100%);
+            width: min(600px, 100%);
             background: var(--panel);
-            border: 1px solid rgba(15, 30, 46, 0.1);
-            border-radius: 22px;
-            padding: 34px;
-            box-shadow: 0 26px 58px rgba(15, 30, 46, 0.15);
+            border: 1px solid rgba(15, 30, 46, 0.09);
+            border-radius: var(--radius-xl);
+            padding: 38px 36px;
+            box-shadow: var(--shadow);
+            will-change: opacity, transform;
             animation: rise 0.5s ease both;
         }
 
+        /* ── Status badge ── */
         .status {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 9px;
             border-radius: 999px;
-            border: 1px solid #bde5da;
-            background: #eaf8f4;
+            border: 1px solid #b0e0d4;
+            background: var(--success-light);
             color: var(--success);
-            font-size: 0.83rem;
+            font-size: 0.78rem;
             font-weight: 800;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
-            padding: 8px 12px;
-            margin-bottom: 16px;
+            padding: 8px 14px;
+            margin-bottom: 18px;
         }
 
         .status-dot {
             width: 9px;
             height: 9px;
-            border-radius: 999px;
-            background: #1db794;
-            box-shadow: 0 0 0 4px rgba(29, 183, 148, 0.16);
+            border-radius: 50%;
+            background: #1dba96;
+            box-shadow: 0 0 0 4px rgba(29, 186, 150, 0.18);
+            flex-shrink: 0;
         }
 
+        /* ── Heading ── */
         h1 {
             font-family: 'Fraunces', serif;
-            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-size: clamp(1.9rem, 4vw, 2.7rem);
             line-height: 1.1;
-            margin-bottom: 10px;
-            max-width: 13ch;
+            letter-spacing: -0.02em;
+            margin-bottom: 12px;
+            max-width: 16ch;
         }
 
         .intro {
             color: var(--ink-soft);
-            font-size: 1.02rem;
-            line-height: 1.65;
-            margin-bottom: 22px;
-            max-width: 54ch;
+            font-size: 0.98rem;
+            line-height: 1.7;
+            margin-bottom: 26px;
+            max-width: 52ch;
         }
 
-        .next-steps {
+        /* ── Timeline ── */
+        .timeline {
             background: var(--panel-soft);
             border: 1px solid var(--line);
-            border-radius: 14px;
-            padding: 18px 18px 6px;
-            margin-bottom: 22px;
+            border-radius: var(--radius-lg);
+            padding: 20px 20px 10px;
+            margin-bottom: 24px;
         }
 
-        .next-steps h3 {
-            font-size: 1rem;
-            margin-bottom: 12px;
+        .timeline h3 {
+            font-size: 0.88rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--ink-mid);
+            margin-bottom: 16px;
         }
 
-        .next-steps ol {
-            padding-left: 18px;
+        .timeline-steps { display: grid; gap: 0; }
+
+        .t-step {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding-bottom: 18px;
+            position: relative;
         }
 
-        .next-steps li {
+        .t-step:last-child { padding-bottom: 10px; }
+
+        .t-step:not(:last-child)::before {
+            content: "";
+            position: absolute;
+            left: 14px;
+            top: 30px;
+            bottom: 0;
+            width: 1.5px;
+            background: var(--line);
+        }
+
+        .t-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--success-light);
+            border: 1.5px solid #b0ddd4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .t-icon svg {
+            width: 13px;
+            height: 13px;
+            stroke: var(--success);
+            fill: none;
+            stroke-width: 2.5;
+        }
+
+        .t-body { padding-top: 5px; }
+
+        .t-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 2px;
+        }
+
+        .t-desc {
+            font-size: 0.83rem;
             color: var(--ink-soft);
-            margin-bottom: 11px;
             line-height: 1.5;
         }
 
-        .contact {
-            color: var(--ink-soft);
-            font-size: 0.95rem;
-            margin-bottom: 14px;
+        /* ── Info card ── */
+        .info-card {
+            border: 1px solid #e0ece8;
+            border-radius: var(--radius-lg);
+            padding: 16px 18px;
+            background: #f9fdfc;
+            margin-bottom: 22px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
         }
 
-        .contact a,
-        .back-link {
-            color: var(--accent);
+        .info-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: var(--success-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-icon svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--success);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .info-text {
+            font-size: 0.86rem;
+            color: var(--ink-soft);
+            line-height: 1.6;
+        }
+
+        .info-text strong {
+            display: block;
+            color: var(--ink);
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        /* ── Contact + link ── */
+        .contact {
+            color: var(--ink-soft);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .contact a {
+            color: var(--success);
             text-decoration: none;
             font-weight: 700;
         }
 
-        .back-link:hover,
-        .contact a:hover {
-            text-decoration: underline;
+        .contact a:hover { text-decoration: underline; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
         }
+
+        .back-link:hover { text-decoration: underline; }
 
         @keyframes rise {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        @media (max-width: 560px) {
-            .container {
-                padding: 24px 18px;
-                border-radius: 18px;
-            }
+        @media (max-width: 520px) {
+            .container { padding: 26px 20px; }
         }
     </style>
 </head>
 <body>
     <main class="container">
+
         <div class="status">
             <span class="status-dot"></span>
             Payment Confirmed
         </div>
+
         <h1>Your audit is officially queued.</h1>
         <p class="intro">
-            Thanks for booking the Stripe Revenue Audit. The next email will include your secure onboarding steps so we can start analysis immediately.
+            Thanks for booking the Stripe Revenue Audit. Check your inbox for your receipt and onboarding steps — we'll start analysis as soon as access is set up.
         </p>
 
-        <section class="next-steps">
+        <section class="timeline">
             <h3>What Happens Next</h3>
-            <ol>
-                <li>Check your inbox for your Stripe receipt and onboarding email.</li>
-                <li>Complete the short intake and grant read-only Stripe access.</li>
-                <li>We audit your metrics and billing logic in 4-5 business days.</li>
-                <li>You receive your report, dashboard, and prioritized fix list.</li>
-            </ol>
+            <div class="timeline-steps">
+                <div class="t-step">
+                    <div class="t-icon">
+                        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <div class="t-body">
+                        <div class="t-title">Check your inbox now</div>
+                        <div class="t-desc">Your Stripe receipt and onboarding instructions are on their way.</div>
+                    </div>
+                </div>
+                <div class="t-step">
+                    <div class="t-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div class="t-body">
+                        <div class="t-title">Complete intake + grant read-only Stripe access</div>
+                        <div class="t-desc">A short form and secure Stripe connection. No code, no deploys — takes under 10 minutes.</div>
+                    </div>
+                </div>
+                <div class="t-step">
+                    <div class="t-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                    <div class="t-body">
+                        <div class="t-title">Deep audit in 4–5 business days</div>
+                        <div class="t-desc">We analyze your billing events, churn segments, dunning flows, and expansion patterns.</div>
+                    </div>
+                </div>
+                <div class="t-step">
+                    <div class="t-icon">
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    </div>
+                    <div class="t-body">
+                        <div class="t-title">Report, dashboard, and fix list delivered</div>
+                        <div class="t-desc">Executive PDF with prioritized opportunities, expected impact, and a plug-and-track dashboard.</div>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <p class="contact">Questions before kickoff? Email <a href="mailto:support@revpilot.net">support@revpilot.net</a>.</p>
-        <a href="/" class="back-link">Back to homepage</a>
+        <div class="info-card">
+            <div class="info-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="info-text">
+                <strong>7-day refund guarantee</strong>
+                If the recommendations aren't actionable, email us within 7 days and we'll refund you in full — no conditions.
+            </div>
+        </div>
+
+        <p class="contact">
+            Questions before kickoff? Email <a href="mailto:support@revpilot.net">support@revpilot.net</a> — we typically reply within a few hours.
+        </p>
+        <a href="index.html" class="back-link">← Back to homepage</a>
+
     </main>
 </body>
 </html>
